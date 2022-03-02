@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <Modal>
+        <div class="modal fade" tabindex="-1" id="modal-insertValidation" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="my-modal-header">
+                        <div class="icon-box">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </div>
+                    </div>
+                    <div class="my-modal-body text-center">
+                        <span class="modal-title">Ops!!</span>
+                        <p>
+                            Por favor preencha todos os campos antes de adicionar a tabela.
+                        </p>
+                    </div>
+                    <div class="my-modal-footer d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            <i class="bi bi-hand-thumbs-up"></i> Entendi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="modal-maxLines" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="my-modal-header">
+                        <div class="icon-box">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </div>
+                    </div>
+                    <div class="my-modal-body text-center">
+                        <span class="modal-title">Ops!!</span>
+                        <p>
+                            O número maximo de 10 linhas <br>
+                            foi excedido.
+                        </p>
+                    </div>
+                    <div class="my-modal-footer d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            <i class="bi bi-hand-thumbs-up"></i> Entendi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="modal-tableLengthValidation" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content my-modal-content">
+                    <div class="my-modal-header">
+                        <div class="icon-box">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </div>
+                    </div>
+                    <div class="my-modal-body text-center">
+                        <span class="modal-title">Ops!!</span>
+                        <p>
+                            Você não pode enviar uma tabela vazia!!
+                        </p>
+                    </div>
+                    <div class="my-modal-footer d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            <i class="bi bi-hand-thumbs-up"></i> Entendi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="modal-formInvalid" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="my-modal-header">
+                        <div class="icon-box">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </div>
+                    </div>
+                    <div class="my-modal-body text-center">
+                        <span class="modal-title">Ops!!</span>
+                        <p>
+                        <h5>Formulário invalido!</h5>
+                        Por Favor, verifique os campos e tente novamente!
+                        </p>
+                    </div>
+                    <div class="my-modal-footer d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            <i class="bi bi-hand-thumbs-up"></i> Entendi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </Modal>
+    <!-- Content -->
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="errorToast" class="toast align-items-center text-white bg-danger " role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <h5>
+                        <i class="bi bi-exclamation-circle"></i>
+                        Formulário Inválido
+                    </h5>
+                    Verifique os campos e tente novamente!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <form class="needs-validation" novalidate>
+            <div id="director-area" hidden>
+                <div class="content-divisor">
+                    <i class="bi bi-building"></i>
+                    <span class="hr-label">Diretoria</span>
+                    <hr>
+
+                </div>
+
+                <div id="inserts-of-director">
+                    <div class="form-floating col">
+                        <select class="form-select" id="floatingSelect" required
+                            aria-label="Floating label select example">
+                            <option selected></option>
+                            <option>Aprovado</option>
+                            <option>Reprovado</option>
+                            <option>Solicitar Revisão</option>
+                        </select>
+                        <label for="floatingSelect">Selecione o Status do Projeto</label>
+                    </div>
+                    <div class="form-floating col">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                            style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">Observação</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alert-display">
+            </div>
+
+            <div class="content-divisor">
+                <i class="bi bi-clipboard2-check"></i>
+                <span class="hr-label">Setor Solicitante</span>
+                <hr>
+
+            </div>
+            <div class="row">
+                <div class="col-3" id="insert">
+                    <select id="setor-select" class="form-select" required>
+                        <option selected></option>
+                        <option value="TI">TI</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="RH">RH</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="content-divisor">
+                <i class="bi bi-box-seam"></i>
+                <span class="hr-label">Fornecedor</span>
+                <hr>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    <div class="action-supplier">
+                        <input type="radio" name="action-supplier" id="search-supplier-radio" checked
+                            onclick="handleSuppliers()">
+                        <label for="search-supplier-radio">Procurar Fornecedor no Sistema</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="action-supplier">
+                        <input type="radio" name="action-supplier" id="register-supplier-radio"
+                            onclick="handleSuppliers()">
+                        <label for="register-supplier-radio">Cadastrar Fornecedor</label>
+                    </div>
+                </div>
+            </div>
+            <div class="supplier-area">
+
+                <div id="search-supplier">
+                    <div class="row justify-content-md-center">
+                        <div class="col-3">
+                            <label class="form-label">Nome do Fornecedor</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <select id="select-supplier" class="form-select nom-For"
+                                onchange="handleSelectSupplier(this)" required>
+                                <option selected></option>
+                            </select>
+                        </div>
+                        <div class="col-cep">
+                            <label class="form-label">CEP</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="text" id="supplier-input-cep" class="form-control cep cep-For"
+                                placeholder="00000000" minlength="8" required readonly>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Cidade</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="text" id="supplier-input-city" class="form-control cid-For" required readonly>
+                        </div>
+                        <div class="col-uf">
+                            <label class="form-label">UF</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="text" id="supplier-input-uf" class="form-control uf-For" maxlength="2"
+                                placeholder="XX" minlength="2" required readonly>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Endereço</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="text" id="supplier-input-address" class="form-control end-For" required
+                                readonly>
+                        </div>
+                    </div><br>
+                    <div class="row justify-content-md-center">
+                        <div class="col-3">
+                            <label class="form-label">Bairro</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="text" id="supplier-input-neighborhood" class="form-control bai-For" required
+                                readonly>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Email</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="email" id="supplier-input-email" class="form-control email-For" required
+                                readonly>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Telefone</label>
+                            <div class="spinner-border" hidden role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <input type="email" id="supplier-input-tel" class="form-control tel tel-For"
+                                placeholder="(00)00000-0000" minlength="13" required readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="register-supplier" hidden>
+                    <div class="row justify-content-md-center">
+                        <div class="col-3">
+                            <label class="form-label">Nome do Fornecedor</label>
+                            <input type="text" class="form-control nom-For" required disabled>
+                        </div>
+                        <div class="col-cep">
+                            <label class="form-label">CEP</label>
+                            <input type="text" class="form-control cep cep-For" placeholder="00000000" minlength="8"
+                                required disabled>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Cidade</label>
+                            <input type="text" class="form-control cid-For" required disabled>
+                        </div>
+                        <div class="col-uf">
+                            <label class="form-label">UF</label>
+                            <input type="text" class="form-control uf-For" minlength="2" maxlength="2" placeholder="XX"
+                                required disabled>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" class="form-control end-For" required disabled>
+                        </div>
+                    </div><br>
+                    <div class="row justify-content-md-center">
+                        <div class="col-3">
+                            <label class="form-label">Bairro</label>
+                            <input type="text" class="form-control bai-For" required disabled>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control email-For" required disabled>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" class="form-control tel tel-For" placeholder="(00)0000-0000"
+                                minlength="13" required disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="content-divisor">
+        <i class="bi bi-cart3"></i>
+        <span class="hr-label">Pedido</span>
+        <hr>
+    </div>
+
+    <div class="input-group form-register">
+        <div id="insert">
+            <label for="qntd" class="form-label">Solicitante/CC</label><br>
+            <input type="text" id="requester">
+        </div>
+        <div id="insert">
+            <label for="qntd" class="form-label">Quantidade</label><br>
+            <div>
+                <input type="text" id="qntd" min="0" data-mask="00000">
+                <i class="bi bi-plus-circle-fill" id="sum" onclick="insertNum(this)"></i>
+                <i class="bi bi-dash-circle-fill" id="sub" onclick="insertNum(this)"></i>
+            </div>
+        </div>
+        <div id="insert">
+            <label for="name" class="form-label">Especificação</label><br>
+            <input type="text" id="name">
+        </div>
+        <div id="insert">
+            <label for="unit-value" class="form-label">Valor Unitario</label><br>
+            <span class="span-money">R$</span>
+            <input type="text" id="unit-value" min="0" placeholder="0,00" class="money">
+        </div>
+    </div>
+    <div class="d-grid gap-2">
+        <button class="btn btn-primary save-btn" type="button" onclick="addData()">
+            Adicionar
+
+        </button>
+    </div>
+    <div class="table-form">
+        <table class="table table-striped caption-top">
+            <thead>
+                <tr>
+                    <th scope="col" class="th-requester">Solicitante/CC</th>
+                    <th scope="col" class="th-qntd">Qntd</th>
+                    <th scope="col" class="th-name">Especificação</th>
+                    <th scope="col" class="th-unit-value">Valor Unitario</th>
+                    <th scope="col" class="th-total-value">Valor Total</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6" style="background-color: lightsteelblue;">
+                        <div id="order-total">
+                            <label for="display">Valor Total do Pedido</label>
+                            <div id="display">
+                                R$<input type="text" class="money" id="display-value" value="0,00" readonly>
+                            </div>
+                            <div class="position-relative">
+                                <button class="btn btn-primary" id="check-btn" type="button" onclick="handleChecked()">
+                                    Confirme os itens
+                                    <input type="checkbox" class="form-check-input" id="check-value"
+                                        onclick="return false" required>
+                                </button>
+                                <div class="invalid-tooltip">Confirme o valor!</div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <button type="button" onclick="_saveData()"></button>
+    </form>
+    </div>
+    <!-- /Content -->
+</body>
+
+<footer>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <!-- Senior -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.contentWindow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
+    <script type="text/javascript" src="https://cdn.senior.com.br/bpm/1.10.0/workflow-cockpit.min.js"></script>
+    <!-- Mask -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+        integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+        </script>
+    <!-- My -->
+    <script src="service.js"></script>
+    <script src="script.js"></script>
+    <script src="integration.js"></script>
+</footer>
+
+</html>
