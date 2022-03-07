@@ -256,3 +256,6 @@ hr{
     color: #969696;
 }
 
+#check-value{
+    display: none;
+}

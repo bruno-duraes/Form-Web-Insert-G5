@@ -169,13 +169,16 @@ function handleChecked() {
     let btn = document.querySelector('#check-btn')
     let rows = document.querySelector('#tbody').children.length
     let el = document.querySelector('#check-value')
+
     if (rows == 0) {
         shootModal('modal-tableLengthValidation')
         btn.setAttribute('class', 'btn btn-danger')
+        // btn.innerHTML = `Confirme os itens <i class="bi bi-x-square"></i>`
     } else {
         el.setAttribute('class', 'form-check-input is-valid')
         el.setAttribute('checked', 'checked')
         btn.setAttribute('class', 'btn btn-success')
+        btn.innerHTML = `Confirmado <i class="bi bi-check-lg"></i>`
     }
 
 }
