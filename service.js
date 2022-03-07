@@ -52,6 +52,8 @@ let requestOptions = {
     redirect: 'follow'
 };
 
+Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
+
 fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
 
     .then(response => response.text())
@@ -71,7 +73,7 @@ fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniorm
             let select = document.querySelector('#select-supplier')
             select.appendChild(option)
         }
-
+        Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.setAttribute('hidden', 'hidden'))
     })
 
     .catch(error => console.log('error', error))
@@ -103,4 +105,40 @@ function handleSelectSupplier(ev) {
         })
 
         .catch(error => console.log('error', error))
+}
+
+// Chamada 
+async function taskStatusInProgress(username, token, requestId) {
+
+    if (!requestId) { throw console.error('processInstanceId is not defined') }
+
+    var myHeaders = new Headers();
+    myHeaders.append("x-bpm-user", username);
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "kind": "MANAGER",
+        "filters": [
+            {
+                "type": "PROCESS_INSTANCE_ID",
+                "stringValue": `${requestId}`
+            }
+        ]
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    let response = await fetch("https://platform.senior.com.br/t/senior.com.br/bridge/1.0/rest/platform/workflow/queries/getTasksTotalizer", requestOptions)
+    let status = await response.json()
+    if (status.inProgressCount > 0) {
+        return true
+    } else {
+        return false
+    }
 }

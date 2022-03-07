@@ -4,25 +4,25 @@ this.workflowCockpit = workflowCockpit({
     onError: _rollback,
 });
 
-let view = {}
-console.log('batata')
+let _info = {}
 
-function _init(data, info) {
+async function _init(data, info) {
     console.log("Informações do processo:", data)
-    view = data.loadContext.fieldsPermission
-    console.log('VIEW')
 
+    _info = info
+    let username = ''
+    let token = ''
+    let requestId = data.processInstanceId
 
-    info.getUserData().then(
-        (user) => {
-            console.log('User:', user)
-        }
-    ).then(() => {
-        info.getPlatformData().then(
-            (platformData) => { console.log('Dados da plataforma:', platformData) }
-        )
+    await info.getUserData().then((user) => {
+        console.log('User:', user)
+        username = user.username
     })
 
+    await info.getPlatformData().then((data) => {
+        console.log('Dados da plataforma:', data)
+        token = data.token.access_token
+    })
 
 
     info.getInfoFromProcessVariables().then((processVar) => {
@@ -33,6 +33,7 @@ function _init(data, info) {
             console.log('Loading...', map)
 
             // Preenchendo os campos do formulario
+
             let busFor = map.get('busFor')
             if (busFor == 'false') {
                 document.querySelector('#register-supplier-radio').setAttribute('checked', 'checked')
@@ -71,17 +72,50 @@ function _init(data, info) {
                 i++
             }
 
+            // Verifica se a solicitação ja passou pela diretoria
+            let decision = map.get('directorDecision')
+
+            if (decision) {
+                let decisionObs = map.get('directorDecisionObs')
+
+                document.querySelector('#floatingSelect').value = decision
+                document.querySelector('#floatingSelect').setAttribute('disabled', 'disabled')
+                document.querySelector('#director-area').removeAttribute('hidden')
+                if (decisionObs) {
+                    document.querySelector('#floatingTextarea2').value = decisionObs
+                    document.querySelector('#floatingTextarea2').setAttribute('readonly', 'readonly')
+                } else {
+                    document.querySelector('#ctrlFloatingTextarea').setAttribute('hidden', 'hidden')
+                }
+            }
+
             formReadOnly()
         }
     })
 
-    function formReadOnly() {
-        info.getTaskData().then((data) => {
-            let { taskName } = data
-            boardDecision()
+    async function formReadOnly() {
 
-            if (taskName == 'Solicitante') { throw console.log('🟡 Enable editing 📝') }
+        const taskInProgress = await taskStatusInProgress(username, token, requestId).then(data => {
+            return data
+        })
 
+        if (!taskInProgress) {
+            document.querySelector('#floatingSelect').setAttribute('disabled', 'disabled')
+            document.querySelector('#floatingTextarea2').setAttribute('readonly', 'readonly')
+            document.querySelector('#director-area').removeAttribute('hidden')
+            setReadOnly()
+        } else if (taskInProgress) {
+
+            const taskName = await info.getTaskData().then((data) => {
+                return data.taskName
+            })
+            boardDecision(taskName)
+
+            if (taskName == 'Solicitante') { throw console.log('Enable editing 📝') }
+            setReadOnly()
+        }
+
+        function setReadOnly() {
             handleChecked()
             let searchInputRadio = document.querySelector('#search-supplier-radio')
             let registerInputRadio = document.querySelector('#register-supplier-radio')
@@ -101,25 +135,22 @@ function _init(data, info) {
             Array.from(document.querySelectorAll('.btn')).map((el) => { el.setAttribute('disabled', 'disabled') })
             Array.from(document.querySelectorAll('table i')).map((el) => { el.remove() })
             Array.from(document.querySelectorAll('#insert i')).map((el) => { el.remove() })
-
-        })
+        }
     }
 
-    function boardDecision() {
-        info.getTaskData().then((data) => {
-            let { taskName } = data
+    function boardDecision(taskName) {
 
-            if (taskName == 'Diretoria') {
-                document.querySelector('#director-area').removeAttribute('hidden')
-                exportedTaskName = taskName
-            }
-        })
+        if (taskName == 'Diretoria') {
+            document.querySelector('#floatingSelect').removeAttribute('disabled')
+            document.querySelector('#ctrlFloatingTextarea').removeAttribute('hidden')
+            document.querySelector('#director-area').removeAttribute('hidden')
+            exportedTaskName = taskName
+        }
     }
 }
 
-function _saveData(data, info) {
+function _saveData() {
 
-    console.log('Informações', info)
     console.log('Formulario Válido?', isFormValid())
 
     if (!isFormValid()) {
@@ -131,6 +162,10 @@ function _saveData(data, info) {
     tableRowsValidation()
 
     let newData = {}
+
+    if (_info.isRequestNew()) {
+        newData.datSol = new Date().toLocaleString().substr(0, 10)
+    }
 
     newData.busFor = inputRadioSearch()
     newData.selSet = document.querySelector('#setor-select').value
@@ -144,6 +179,7 @@ function _saveData(data, info) {
     newData.telFor = searchOrRegister().querySelector('.tel-For').value
 
     // capturando os valores da tabela
+    let tableStr = ""
     let tableRows = document.querySelector('#tbody').children
     for (let i = 0; i < tableRows.length; i++) {
         let id = i + 1
@@ -152,15 +188,19 @@ function _saveData(data, info) {
         newData[`tabDes-${id}`] = document.querySelector(`#input-name-${id}`).value
         newData[`tabUnV-${id}`] = document.querySelector(`#input-unitValue-${id}`).value
         newData[`tabToV-${id}`] = document.querySelector(`#input-totalValue-${id}`).value
+
+        tableStr += `
+        ${document.querySelector(`#input-requester-${id}`).value}|${document.querySelector(`#input-qnt-${id}`).value}|${document.querySelector(`#input-name-${id}`).value}|${document.querySelector(`#input-unitValue-${id}`).value}|${document.querySelector(`#input-totalValue-${id}`).value}/`
     }
     newData.tabTot = document.querySelector('#display-value').value
+    newData.tableStr = tableStr
 
     if (exportedTaskName == "Diretoria") {
         newData.directorDecision = document.querySelector('#floatingSelect').value
         newData.directorDecisionObs = document.querySelector('#floatingTextarea2').value
     }
 
-    console.log(newData)
+    console.log('Dados salvos', newData)
     return {
         formData: newData
     }

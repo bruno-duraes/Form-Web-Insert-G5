@@ -155,9 +155,8 @@
                         </select>
                         <label for="floatingSelect">Selecione o Status do Projeto</label>
                     </div>
-                    <div class="form-floating col">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                            style="height: 100px"></textarea>
+                    <div class="form-floating col" id="ctrlFloatingTextarea">
+                        <textarea class="form-control" id="floatingTextarea2" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">Observação</label>
                     </div>
                 </div>
@@ -386,7 +385,6 @@
                                     <input type="checkbox" class="form-check-input" id="check-value"
                                         onclick="return false" required>
                                 </button>
-                                <div class="invalid-tooltip">Confirme o valor!</div>
                             </div>
                         </div>
                     </th>
@@ -394,7 +392,6 @@
             </tfoot>
         </table>
     </div>
-    <button type="button" onclick="_saveData()"></button>
     </form>
     </div>
     <!-- /Content -->
@@ -418,9 +415,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer">
         </script>
     <!-- My -->
-    <script src="service.js"></script>
     <script src="script.js"></script>
     <script src="integration.js"></script>
+    <script src="service.js"></script>
 </footer>
 
 </html>
