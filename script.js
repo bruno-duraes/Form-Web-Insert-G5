@@ -28,12 +28,24 @@ function insertsValidation() {
     }
 }
 
+
 function shootModal(str) {
     let modal_el = document.querySelector(`#${str}`)
     let modal = new bootstrap.Modal(modal_el)
     modal.show()
 }
 
+
+
+let loadingModal_el = document.querySelector('#modal-loading')
+let loadingModal = new bootstrap.Modal(loadingModal_el)
+
+function showLoadingModal() {
+    loadingModal.show()
+}
+function hideLoadingModal() {
+    loadingModal.hide()
+}
 
 function addData() {
     if (insertsValidation() == 'invalid') {

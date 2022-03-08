@@ -259,3 +259,15 @@ hr{
 #check-value{
     display: none;
 }
+
+#modal-loading .loading-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-loading .spinner-border{
+    height: 100px;
+    width: 100px;
+    font-size: 40px;
+}

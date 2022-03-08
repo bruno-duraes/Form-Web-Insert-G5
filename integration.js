@@ -3,11 +3,11 @@ this.workflowCockpit = workflowCockpit({
     onSubmit: _saveData,
     onError: _rollback,
 });
-
 let _info = {}
+showLoadingModal()
 
 async function _init(data, info) {
-    console.log("Informações do processo:", data)
+    await createOptions()
 
     _info = info
     let username = ''
@@ -15,12 +15,10 @@ async function _init(data, info) {
     let requestId = data.processInstanceId
 
     await info.getUserData().then((user) => {
-        console.log('User:', user)
         username = user.username
     })
 
     await info.getPlatformData().then((data) => {
-        console.log('Dados da plataforma:', data)
         token = data.token.access_token
     })
 
@@ -30,7 +28,6 @@ async function _init(data, info) {
 
             let map = new Map()
             processVar.map(({ key, value }) => map.set(key, value))
-            console.log('Loading...', map)
 
             // Preenchendo os campos do formulario
 
@@ -50,26 +47,34 @@ async function _init(data, info) {
             } else {
                 document.querySelector('#setor-select').value = map.get('selSet')
                 Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
-                setTimeout(() => {
-                    let selectNomFor = searchOrRegister().querySelector('.nom-For')
-                    let selectChildrens = Array.from(selectNomFor.children)
-                    selectChildrens.map((el) => {
-                        if (el.value == map.get('nomFor')) {
-                            el.setAttribute('selected', 'selected')
-                            handleSelectSupplier(selectNomFor)
-                        }
-                    })
-                }, 2000)
+                let selectNomFor = searchOrRegister().querySelector('.nom-For')
+                let selectChildrens = Array.from(selectNomFor.children)
+                selectChildrens.map((el) => {
+                    if (el.value == map.get('nomFor')) {
+                        el.setAttribute('selected', 'selected')
+                        handleSelectSupplier(selectNomFor)
+                    }
+                })
             }
 
-            let i = 1
-            while (map.get(`tabSol-${i}`) !== undefined) {
-                document.querySelector('#requester').value = map.get(`tabSol-${i}`)
-                document.querySelector('#qntd').value = map.get(`tabQnt-${i}`)
-                document.querySelector('#name').value = map.get(`tabDes-${i}`)
-                document.querySelector('#unit-value').value = map.get(`tabUnV-${i}`)
+            // let i = 1
+            // while (map.get(`tabSol-${i}`) !== undefined) {
+            //     document.querySelector('#requester').value = map.get(`tabSol-${i}`)
+            //     document.querySelector('#qntd').value = map.get(`tabQnt-${i}`)
+            //     document.querySelector('#name').value = map.get(`tabDes-${i}`)
+            //     document.querySelector('#unit-value').value = map.get(`tabUnV-${i}`)
+            //     addData()
+            //     i++
+            // }
+            let tableSplited = map.get('tableStr').split('/')
+            // console.log(tableSplited.length - 1)
+            for (let i = 0; i < tableSplited.length - 1; i++) {
+                const rowSplited = tableSplited[i].split('|')
+                document.querySelector('#requester').value = rowSplited[0]
+                document.querySelector('#qntd').value = rowSplited[1]
+                document.querySelector('#name').value = rowSplited[2]
+                document.querySelector('#unit-value').value = rowSplited[3]
                 addData()
-                i++
             }
 
             // Verifica se a solicitação ja passou pela diretoria
@@ -93,6 +98,7 @@ async function _init(data, info) {
         }
     })
 
+
     async function formReadOnly() {
 
         const taskInProgress = await taskStatusInProgress(username, token, requestId).then(data => {
@@ -111,7 +117,7 @@ async function _init(data, info) {
             })
             boardDecision(taskName)
 
-            if (taskName == 'Solicitante') { throw console.log('Enable editing 📝') }
+            if (taskName == 'Solicitante') { throw console.log('Enable editing') }
             setReadOnly()
         }
 
@@ -142,16 +148,19 @@ async function _init(data, info) {
 
         if (taskName == 'Diretoria') {
             document.querySelector('#floatingSelect').removeAttribute('disabled')
+            document.querySelector('#floatingTextarea2').removeAttribute('readonly')
             document.querySelector('#ctrlFloatingTextarea').removeAttribute('hidden')
             document.querySelector('#director-area').removeAttribute('hidden')
             exportedTaskName = taskName
         }
     }
+
+    hideLoadingModal()
+
 }
 
 function _saveData() {
 
-    console.log('Formulario Válido?', isFormValid())
 
     if (!isFormValid()) {
         shootAlert()
@@ -180,18 +189,10 @@ function _saveData() {
 
     // capturando os valores da tabela
     let tableStr = ""
-    let tableRows = document.querySelector('#tbody').children
-    for (let i = 0; i < tableRows.length; i++) {
-        let id = i + 1
-        newData[`tabSol-${id}`] = document.querySelector(`#input-requester-${id}`).value
-        newData[`tabQnt-${id}`] = document.querySelector(`#input-qnt-${id}`).value
-        newData[`tabDes-${id}`] = document.querySelector(`#input-name-${id}`).value
-        newData[`tabUnV-${id}`] = document.querySelector(`#input-unitValue-${id}`).value
-        newData[`tabToV-${id}`] = document.querySelector(`#input-totalValue-${id}`).value
 
-        tableStr += `
-        ${document.querySelector(`#input-requester-${id}`).value}|${document.querySelector(`#input-qnt-${id}`).value}|${document.querySelector(`#input-name-${id}`).value}|${document.querySelector(`#input-unitValue-${id}`).value}|${document.querySelector(`#input-totalValue-${id}`).value}/`
-    }
+    Array.from(document.querySelectorAll('#tbody tr')).map((tr) => {
+        tableStr += `${tr.querySelector('.requester').value}|${tr.querySelector('.qntd').value}|${tr.querySelector('.name').value}|${tr.querySelector('.unit-value').value}|${tr.querySelector('.total-value').value}/`
+    })
     newData.tabTot = document.querySelector('#display-value').value
     newData.tableStr = tableStr
 
@@ -200,7 +201,7 @@ function _saveData() {
         newData.directorDecisionObs = document.querySelector('#floatingTextarea2').value
     }
 
-    console.log('Dados salvos', newData)
+    // console.log('Dados salvos', newData)
     return {
         formData: newData
     }
@@ -275,27 +276,17 @@ function isFormValid() {
         dataValid.push(searchOrRegister().querySelector('.tel-For').value)
     }
 
-    let tableRows = document.querySelector('#tbody').children
-    for (let i = 0; i < tableRows.length; i++) {
-        let id = i + 1
-        dataValid.push(document.querySelector(`#input-requester-${id}`).value)
-        dataValid.push(document.querySelector(`#input-qnt-${id}`).value)
-        dataValid.push(document.querySelector(`#input-name-${id}`).value)
-        dataValid.push(document.querySelector(`#input-unitValue-${id}`).value)
-        dataValid.push(document.querySelector(`#input-totalValue-${id}`).value)
-    }
+    Array.from(document.querySelectorAll('#tbody input')).map((el) => { dataValid.push(el.value) })
+
 
     let dataInvalid = dataValid.filter((value) => { return value == '' })
     let isChecked = document.querySelector('#check-value').checked
-
-    console.log('Dados', dataValid)
-    console.log('Dados Inv', dataInvalid)
 
     if (!isChecked) {
         document.querySelector('#check-value').setAttribute('class', 'form-check-input is-invalid')
         return false
     }
-    if (dataInvalid.length > 0) {
+    if (dataInvalid.length) {
         return false
     }
 

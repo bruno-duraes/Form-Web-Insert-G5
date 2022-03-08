@@ -54,30 +54,29 @@ let requestOptions = {
 
 Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
 
-fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
+async function createOptions() {
+    let response = await fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
 
-    .then(response => response.text())
+    let result = await response.json()
 
-    .then(result => {
-        let suppliers = JSON.parse(result).tabela
-        arrSupp = suppliers
-        // console.log(suppliers)
 
-        for (let i = 0; i < suppliers.length; i++) {
-            const supplier = suppliers[i];
-            const { nomfor } = supplier
+    suppliers = result.tabela
+    // console.log(suppliers)
 
-            let option = document.createElement('option')
-            option.setAttribute('id', `supplier-${i}`)
-            option.innerHTML = nomfor
-            let select = document.querySelector('#select-supplier')
-            select.appendChild(option)
-        }
-        Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.setAttribute('hidden', 'hidden'))
-    })
+    for (let i = 0; i < suppliers.length; i++) {
+        const supplier = suppliers[i];
+        const { nomfor } = supplier
 
-    .catch(error => console.log('error', error))
+        let option = document.createElement('option')
+        option.setAttribute('id', `supplier-${i}`)
+        option.innerHTML = nomfor
+        let select = document.querySelector('#select-supplier')
+        select.appendChild(option)
+    }
 
+    Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.setAttribute('hidden', 'hidden'))
+    return null
+}
 
 function handleSelectSupplier(ev) {
 
@@ -112,12 +111,12 @@ async function taskStatusInProgress(username, token, requestId) {
 
     if (!requestId) { throw console.error('processInstanceId is not defined') }
 
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("x-bpm-user", username);
     myHeaders.append("Authorization", token);
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
+    let raw = JSON.stringify({
         "kind": "MANAGER",
         "filters": [
             {
@@ -127,7 +126,7 @@ async function taskStatusInProgress(username, token, requestId) {
         ]
     });
 
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: myHeaders,
         body: raw,

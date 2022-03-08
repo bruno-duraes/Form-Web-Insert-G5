@@ -20,6 +20,15 @@
 
 <body>
     <Modal>
+
+        <div class="modal fade" tabindex="-1" id="modal-loading" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered loading-content">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" tabindex="-1" id="modal-insertValidation" data-bs-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content my-modal-content">
@@ -392,6 +401,7 @@
             </tfoot>
         </table>
     </div>
+    <button type="button" onclick="_saveData()">Save</button>
     </form>
     </div>
     <!-- /Content -->
@@ -416,8 +426,8 @@
         </script>
     <!-- My -->
     <script src="script.js"></script>
-    <script src="integration.js"></script>
     <script src="service.js"></script>
+    <script src="integration.js"></script>
 </footer>
 
 </html>
