@@ -173,7 +173,7 @@ function handleChecked() {
     if (rows == 0) {
         shootModal('modal-tableLengthValidation')
         btn.setAttribute('class', 'btn btn-danger')
-        // btn.innerHTML = `Confirme os itens <i class="bi bi-x-square"></i>`
+        btn.innerHTML = `Confirme os itens`
     } else {
         el.setAttribute('class', 'form-check-input is-valid')
         el.setAttribute('checked', 'checked')
@@ -189,7 +189,7 @@ function insertNum(el) {
     if (el.id == 'sum') {
         display.value++
     } else {
-        display.value == 0 ? null : display.value--
+        display.value == 1 ? null : display.value--
     }
 }
 

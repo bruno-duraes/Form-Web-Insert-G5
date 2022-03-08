@@ -337,7 +337,7 @@
         <div id="insert">
             <label for="qntd" class="form-label">Quantidade</label><br>
             <div>
-                <input type="text" id="qntd" min="0" data-mask="00000">
+                <input type="text" id="qntd" min="1" data-mask="00000">
                 <i class="bi bi-plus-circle-fill" id="sum" onclick="insertNum(this)"></i>
                 <i class="bi bi-dash-circle-fill" id="sub" onclick="insertNum(this)"></i>
             </div>
@@ -382,9 +382,9 @@
                             <div class="position-relative">
                                 <button class="btn btn-primary" id="check-btn" type="button" onclick="handleChecked()">
                                     Confirme os itens
-                                    <input type="checkbox" class="form-check-input" id="check-value" onclick="false"
-                                        required>
                                 </button>
+                                <input type="checkbox" class="form-check-input" id="check-value" onclick="false"
+                                    required>
                             </div>
                         </div>
                     </th>
