@@ -52,6 +52,8 @@ let requestOptions = {
     redirect: 'follow'
 };
 
+let suppliersRes = {}
+
 Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
 
 async function createOptions() {
@@ -67,6 +69,8 @@ async function createOptions() {
     let result = JSON.parse(responseUtf8)
 
     let suppliers = result.tabela
+
+    suppliersRes = suppliers
 
     suppliers = result.tabela
     // console.log(result)
@@ -90,28 +94,20 @@ function handleSelectSupplier(ev) {
 
     Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
 
-    fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
+    let suppliers = suppliersRes
+    const selectedIndex = ev.options[ev.selectedIndex].index - 1
 
-        .then(response => response.text())
+    let selectedSupplier = suppliers[selectedIndex]
 
-        .then(result => {
-            let suppliers = JSON.parse(result).tabela
-            const selectedIndex = ev.options[ev.selectedIndex].index - 1
+    document.querySelector('#supplier-input-cep').value = selectedSupplier.cepfor
+    document.querySelector('#supplier-input-city').value = selectedSupplier.cidfor
+    document.querySelector('#supplier-input-uf').value = selectedSupplier.sigufs
+    document.querySelector('#supplier-input-address').value = selectedSupplier.endfor
+    document.querySelector('#supplier-input-neighborhood').value = selectedSupplier.baifor
+    document.querySelector('#supplier-input-email').value = selectedSupplier.intnet
+    document.querySelector('#supplier-input-tel').value = selectedSupplier.fonfor
 
-            let selectedSupplier = suppliers[selectedIndex]
-
-            document.querySelector('#supplier-input-cep').value = selectedSupplier.cepfor
-            document.querySelector('#supplier-input-city').value = selectedSupplier.cidfor
-            document.querySelector('#supplier-input-uf').value = selectedSupplier.sigufs
-            document.querySelector('#supplier-input-address').value = selectedSupplier.endfor
-            document.querySelector('#supplier-input-neighborhood').value = selectedSupplier.baifor
-            document.querySelector('#supplier-input-email').value = selectedSupplier.intnet
-            document.querySelector('#supplier-input-tel').value = selectedSupplier.fonfor
-
-            Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.setAttribute('hidden', 'hidden'))
-        })
-
-        .catch(error => console.log('error', error))
+    Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.setAttribute('hidden', 'hidden'))
 }
 
 // Chamada 

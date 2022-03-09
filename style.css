@@ -287,3 +287,11 @@ hr{
     width: 100px;
     font-size: 40px;
 }
+
+.select2-selection.select2-selection--single{
+    height: 38px;
+    
+}
+.select2-selection.select2-selection--single span{
+    margin-top: 4px;
+}

@@ -212,5 +212,11 @@ $(document).ready(() => {
     $('.tel').mask('(00)00000-0000')
 })
 
+// Plugin Search Select
+// In your Javascript (external .js resource or <script> tag)
+$(document).ready(function () {
+    $('#select-supplier').select2();
+});
+
 
 
