@@ -185,7 +185,7 @@ function handleChecked() {
     if (rows == 0) {
         shootModal('modal-tableLengthValidation')
         btn.setAttribute('class', 'btn btn-danger')
-        btn.innerHTML = `Confirme os itens`
+        btn.innerHTML = `<i class="bi bi-exclamation-circle"></i> Confirme os itens`
     } else {
         el.setAttribute('class', 'form-check-input is-valid')
         el.setAttribute('checked', 'checked')

@@ -3,6 +3,7 @@ this.workflowCockpit = workflowCockpit({
     onSubmit: _saveData,
     onError: _rollback,
 });
+
 let _info = {}
 showLoadingModal()
 
@@ -105,6 +106,10 @@ async function _init(data, info) {
             return data
         })
 
+        const taskName = await info.getTaskData().then((data) => {
+            return data.taskName
+        })
+
         if (!taskInProgress) {
             document.querySelector('#floatingSelect').setAttribute('disabled', 'disabled')
             document.querySelector('#floatingTextarea2').setAttribute('readonly', 'readonly')
@@ -112,12 +117,9 @@ async function _init(data, info) {
             setReadOnly()
         } else if (taskInProgress) {
 
-            const taskName = await info.getTaskData().then((data) => {
-                return data.taskName
-            })
             boardDecision(taskName)
 
-            if (taskName == 'Solicitante') { throw console.log('Enable editing') }
+            if (taskName == 'Solicitante') { throw console }
             setReadOnly()
         }
 

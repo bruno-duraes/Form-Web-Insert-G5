@@ -57,11 +57,19 @@ Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAt
 async function createOptions() {
     let response = await fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
 
-    let result = await response.json()
 
+    let responseUtf8 = await (response.arrayBuffer())
+        .then((buffer) => {
+            let decoder = new TextDecoder("iso-8859-1")
+            return decoder.decode(buffer)
+        })
+
+    let result = JSON.parse(responseUtf8)
+
+    let suppliers = result.tabela
 
     suppliers = result.tabela
-    // console.log(suppliers)
+    // console.log(result)
 
     for (let i = 0; i < suppliers.length; i++) {
         const supplier = suppliers[i];
