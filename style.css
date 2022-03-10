@@ -290,7 +290,7 @@ hr{
 
 .select2-selection.select2-selection--single{
     height: 38px;
-    
+    border: 1px solid #cccccc;
 }
 .select2-selection.select2-selection--single span{
     margin-top: 4px;

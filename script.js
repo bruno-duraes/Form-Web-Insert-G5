@@ -213,10 +213,17 @@ $(document).ready(() => {
 })
 
 // Plugin Search Select
-// In your Javascript (external .js resource or <script> tag)
+
 $(document).ready(function () {
     $('#select-supplier').select2();
-});
+    document.querySelector('.select2-selection.select2-selection--single').onclick = () => {
+        document.querySelector('.select2-search__field').focus()
+    }
+    document.querySelector('.select2-selection__arrow').remove()
+})
+
+
+
 
 
 

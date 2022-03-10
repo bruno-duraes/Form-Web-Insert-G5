@@ -56,6 +56,7 @@ async function _init(data, info) {
                         handleSelectSupplier(selectNomFor)
                     }
                 })
+                document.querySelector('.select2-selection__rendered').innerHTML = map.get('nomFor')
             }
 
             // let i = 1
@@ -106,16 +107,15 @@ async function _init(data, info) {
             return data
         })
 
-        const taskName = await info.getTaskData().then((data) => {
-            return data.taskName
-        })
-
         if (!taskInProgress) {
             document.querySelector('#floatingSelect').setAttribute('disabled', 'disabled')
             document.querySelector('#floatingTextarea2').setAttribute('readonly', 'readonly')
             document.querySelector('#director-area').removeAttribute('hidden')
             setReadOnly()
         } else if (taskInProgress) {
+            const taskName = await info.getTaskData().then((data) => {
+                return data.taskName
+            })
 
             boardDecision(taskName)
 
@@ -124,11 +124,10 @@ async function _init(data, info) {
         }
 
         function setReadOnly() {
+            console.log('Readonly')
             handleChecked()
-            let searchInputRadio = document.querySelector('#search-supplier-radio')
-            let registerInputRadio = document.querySelector('#register-supplier-radio')
-
-            searchInputRadio.checked ? registerInputRadio.setAttribute('disabled', 'disabled') : searchInputRadio.setAttribute('disabled', 'disabled')
+            document.querySelector('#search-supplier-radio').setAttribute('disabled', 'disabled')
+            document.querySelector('#register-supplier-radio').setAttribute('disabled', 'disabled')
 
             document.querySelector('#setor-select').setAttribute('disabled', 'disabled')
             searchOrRegister().querySelector('.nom-For').setAttribute('disabled', 'disabled')
