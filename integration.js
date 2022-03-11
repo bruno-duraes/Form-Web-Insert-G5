@@ -5,9 +5,9 @@ this.workflowCockpit = workflowCockpit({
 });
 
 let _info = {}
-// showLoadingModal()
 
 async function _init(data, info) {
+    showLoadingModal()
     await createOptions()
 
     _info = info

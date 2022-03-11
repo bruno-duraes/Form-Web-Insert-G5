@@ -220,6 +220,8 @@ $(document).ready(function () {
         document.querySelector('.select2-search__field').focus()
     }
     document.querySelector('.select2-selection__arrow').remove()
+    document.querySelector('.select2-container--default').removeAttribute('style')
+    document.querySelector('.select2-container--default').classList.add('col-12')
 })
 
 
