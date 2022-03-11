@@ -200,14 +200,14 @@
             </div>
 
             <div class="row">
-                <div class="col-3">
+                <div class="col-4">
                     <div class="action-supplier">
                         <input type="radio" name="action-supplier" id="search-supplier-radio" checked
                             onclick="handleSuppliers()">
                         <label for="search-supplier-radio">Buscar Fornecedor no Sistema</label>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                     <div class="action-supplier">
                         <input type="radio" name="action-supplier" id="register-supplier-radio"
                             onclick="handleSuppliers()">
@@ -218,13 +218,13 @@
             <div class="supplier-area">
 
                 <div id="search-supplier">
-                    <div class="row justify-content-md-center ">
-                        <div class="col-3" style="width: 407px;">
+                    <div class="row justify-content-md-center">
+                        <div class="col-5">
                             <label class="form-label">Nome do Fornecedor</label>
                             <div class="spinner-border" hidden role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            <div class="select-suppliers-div">
+                            <div class="select-suppliers-div col-12">
                                 <select style="height: 38px" id="select-supplier" class="form-select nom-For"
                                     onchange="handleSelectSupplier(this)" required>
                                     <option selected></option>
@@ -254,6 +254,8 @@
                             <input type="text" id="supplier-input-uf" class="form-control uf-For" maxlength="2"
                                 placeholder="XX" minlength="2" required readonly>
                         </div>
+                    </div><br>
+                    <div class="row justify-content-md-center">
                         <div class="col-3">
                             <label class="form-label">Endereço</label>
                             <div class="spinner-border" hidden role="status">
@@ -262,8 +264,6 @@
                             <input type="text" id="supplier-input-address" class="form-control end-For" required
                                 readonly>
                         </div>
-                    </div><br>
-                    <div class="row justify-content-md-center">
                         <div class="col-3">
                             <label class="form-label">Bairro</label>
                             <div class="spinner-border" hidden role="status">
@@ -280,7 +280,7 @@
                             <input type="email" id="supplier-input-email" class="form-control email-For" required
                                 readonly>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label class="form-label">Telefone</label>
                             <div class="spinner-border" hidden role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -293,7 +293,7 @@
 
                 <div id="register-supplier" hidden>
                     <div class="row justify-content-md-center">
-                        <div class="col-3">
+                        <div class="col-5">
                             <label class="form-label">Nome do Fornecedor</label>
                             <input type="text" class="form-control nom-For" required disabled>
                         </div>
@@ -311,12 +311,12 @@
                             <input type="text" class="form-control uf-For" minlength="2" maxlength="2" placeholder="XX"
                                 required disabled>
                         </div>
+                    </div><br>
+                    <div class="row justify-content-md-center">
                         <div class="col-3">
                             <label class="form-label">Endereço</label>
                             <input type="text" class="form-control end-For" required disabled>
                         </div>
-                    </div><br>
-                    <div class="row justify-content-md-center">
                         <div class="col-3">
                             <label class="form-label">Bairro</label>
                             <input type="text" class="form-control bai-For" required disabled>
@@ -325,7 +325,7 @@
                             <label class="form-label">Email</label>
                             <input type="email" class="form-control email-For" required disabled>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label class="form-label">Telefone</label>
                             <input type="tel" class="form-control tel tel-For" placeholder="(00)0000-0000"
                                 minlength="13" required disabled>
