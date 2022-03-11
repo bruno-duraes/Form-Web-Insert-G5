@@ -4,6 +4,12 @@ body{
     margin: 0;
 }
 
+textarea:focus, input:focus, select:focus, .form-control:focus, .form-select:focus,#insert input:focus {
+    box-shadow: none;
+    outline: none;
+    border: #66afe9 solid 1px;
+}
+
 .form-register{
     display: flex;
     justify-content: space-around;
@@ -116,7 +122,7 @@ thead th{
 }
 
 .unit-value,.th-unit-value{
-    width: 10vw;
+    width: 11vw;
 }
 
 .total-value,.th-total-value{
