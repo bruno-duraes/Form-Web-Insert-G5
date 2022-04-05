@@ -57,7 +57,7 @@ let suppliersRes = {}
 Array.from(document.querySelectorAll('.spinner-border')).map((el) => el.removeAttribute('hidden'))
 
 async function createOptions() {
-    let response = await fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://seniormsc.mainhardt.com.br:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
+    let response = await fetch("https://seniormsc.mainhardt.com.br:8181/API/G5Rest?server=https://localhost:8181&module=sapiens&service=com_platform_fornecedor&port=consultafornecedor", requestOptions)
 
 
     let responseUtf8 = await (response.arrayBuffer())
